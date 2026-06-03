@@ -1,0 +1,54 @@
+---
+- name: Installer apache2 + config
+  hosts: all
+  
+  tasks:
+
+    - name: Install apache2 + mysql
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2
+        - mysql-server
+      when: ansible_facts["hostname"] != "node3"
+
+    - name: Install git + nginx + cowsay
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - nginx
+        - cowsay
+      when: ansible_facts["hostname"] == "node3"
+
+    - name: Gather the rpm package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Check
+      ansible.builtin.debug:
+        var: ansible_facts["distribution"]
+
+    - name: Install ufw on Ubuntu
+      ansible.builtin.apt:
+       name: ufw
+       state: present
+      when: ansible_facts["distribution"] == "Ubuntu"
+
+    - name: Change index.html
+      ansible.builtin.template:
+        src: template/index.j2
+        dest: /var/www/html/index.html
+        mode: '0644'
+      when: "'apache2' in ansible_facts.packages or 'nginx' in ansible_facts.packages"
+
+    - name: Change /etc/jour
+      ansible.builtin.template:
+        src: templace/jour.j2
+        dest: /etc/jour
+        mode: '0644'
+  
