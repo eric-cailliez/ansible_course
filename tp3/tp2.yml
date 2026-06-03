@@ -1,0 +1,14 @@
+---
+- name: Installer apache2 + config
+  hosts: all
+  
+  tasks:
+  
+    - name: Install apache2 + mysql
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - apache2
+        - mysql-server

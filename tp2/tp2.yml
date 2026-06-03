@@ -1,0 +1,25 @@
+---
+- name: Installer apache2 + config
+  hosts: all
+  
+  tasks:
+  
+    - name: Install apache2 + mysql
+      ansible.builtin.apt:
+        update_cache: true
+        name: "{{ item }}"
+        state: present
+      loop:
+        - apache2
+        - mysql-server
+
+    - name: Gather rpm facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Change index.html if Apache2 is installed
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: "644"
+      when: "'apache2' in ansible_facts.packages"
