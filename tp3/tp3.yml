@@ -48,7 +48,8 @@
 
     - name: Change /etc/jour
       ansible.builtin.template:
-        src: templace/jour.j2
+        src: template/jour.j2
         dest: /etc/jour
         mode: '0644'
+      tags: jour
   

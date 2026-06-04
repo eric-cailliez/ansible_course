@@ -1,0 +1,18 @@
+{% set jour  = ansible_facts['date_time']['day']  | int %}
+{% set heure = ansible_facts['date_time']['hour'] | int %}
+
+# Aujourd'hui nous sommes le {{ "%02d" % jour }} du mois.
+
+{% if (jour % 2) == 0 %}
+=> Le jour est **pair**.
+{% else %}
+=> Le jour est **impair**.
+{% endif %}
+
+# Heure locale (sur la machine cible) :
+{% if heure >= 12 %}
+=> Il est {{ heure }}h (PM)
+{% else %}
+=> Il est {{ heure }}h (AM)
+{% endif %}
+
