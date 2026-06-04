@@ -1,0 +1,11 @@
+---
+- name: tp5
+  hosts: all
+
+  tasks:
+
+    - name: exec tp3
+      import_tasks: tp3.yml
+
+    - name: exec tp4
+      import_tasks: tp4.yml
